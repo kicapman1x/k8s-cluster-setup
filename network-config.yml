@@ -1,7 +1,10 @@
 version: 2
 ethernets:
-  ens3:
+  all-en:
+    match:
+      name: "en*"
     dhcp4: false
+    optional: true
     addresses:
       - 10.69.69.69/24
     gateway4: 10.69.69.1

@@ -1,14 +1,18 @@
+#cloud-config
 hostname: daddyvm01
 manage_etc_hosts: true
 
 users:
   - name: daddy
-    passwd: <hashed_password_here>
+    ssh-authorized-keys:
+      - <ssh key>
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users, admin, docker
     shell: /bin/bash
   - name: root
-    passwd: <hashed_password_here>
+    ssh-authorized-keys:
+      - <ssh key>
+    shell: /bin/bash
     lock_passwd: false
 
 ssh_pwauth: true
