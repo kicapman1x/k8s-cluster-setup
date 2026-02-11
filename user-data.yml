@@ -1,0 +1,32 @@
+hostname: daddyvm01
+manage_etc_hosts: true
+
+users:
+  - name: daddy
+    passwd: <hashed_password_here>
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin, docker
+    shell: /bin/bash
+  - name: root
+    passwd: <hashed_password_here>
+    lock_passwd: false
+
+ssh_pwauth: true
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - vim
+  - ca-certificates
+  - gnupg
+  - htop
+  - net-tools
+  - jq
+
+swap:
+  filename: none
+
+runcmd:
+  - swapoff -a
