@@ -51,3 +51,39 @@ ssh -i $HOME/.ssh/daddyvm01 daddy@10.69.69.69
 
 Once ssh in, you can choose to set the password 
 sudo passwd daddy
+
+sudo swapoff -a 
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+sudo modprobe br_netfilter 
+echo br_netfilter | sudo tee /etc/modules-load.d/k8s.conf cat 
+<<EOF | sudo tee /etc/sysctl.d/k8s.conf 
+net.bridge.bridge-nf-call-iptables = 1 
+net.ipv4.ip_forward = 1 
+net.bridge.bridge-nf-call-ip6tables = 1 
+EOF 
+sudo sysctl --system
+
+Do same for other VMs
+
+# Control Plane 
+curl -sfL https://get.k3s.io | sh -
+^ installation of control plane 
+sudo kubectl get no 
+
+Get the join token
+sudo cat /var/lib/rancher/k3s/server/node-token
+sudo cat /etc/rancher/k3s/k3s.yaml 
+^ join token and kubeconfig respectively 
+
+# Worker Nodes
+curl -sfL https://get.k3s.io | \
+K3S_URL=https://10.69.69.69:6443 \
+K3S_TOKEN=<paste-token> \
+sh -
+
+Add the following to your profile: 
+export KUBECONFIG="/home/daddy/apps/virt/k8s/daddyvm_kubeconfig"
+alias k='/home/daddy/apps/docker/docker_apps/kind/bin/kubectl --server=https://10.69.69.69:6443 --cache-dir=/home/daddy/apps/virt/k8s/data'
+alias daddyvmoff="virsh shutdown daddyvm01 && virsh shutdown daddyvm02"
+alias daddyvmon="virsh start daddyvm01 && virsh start daddyvm02"
+
