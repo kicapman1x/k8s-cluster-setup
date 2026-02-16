@@ -1,0 +1,11 @@
+[Unit]
+Description=Allow Tailscale to access libvirt guests
+After=libvirtd.service
+Wants=libvirtd.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/daddy/apps/virt/network/libvirt-ts-nft.sh
+
+[Install]
+WantedBy=multi-user.target
